@@ -5,22 +5,40 @@ import { useSession } from './ctx';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useState } from 'react';
-import { login, user } from '@/database/users_db';
-import { setStorageItemAsync, useStorageState } from '@/hooks/useStorageState';
+import { login } from '@/database/db';
+import { create, user } from '@/database/users_db';
+import { setStorageItemAsync } from '@/hooks/useStorageState';
 
-export default function SignIn() {
+export default function SignUp() {
     const { signIn } = useSession();
+    const [first_name, setFirstName] = useState('');
+    const [last_name, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     return (
         
         <ThemedView style={{ flex: 1, justifyContent: 'center' }}>
             <ThemedView style={styles.titleContainer}>
-                <ThemedText type='title'>TripFlow</ThemedText>
+                <ThemedText type='title'>Sing up on TripFlow</ThemedText>
             </ThemedView>
             <ThemedView style={{ flex: 2, justifyContent: 'center', alignItems:'center' }}>
+            <ThemedText>First Name</ThemedText>
+                <TextInput 
+                    style={styles.input}
+                    onChangeText={newFname => setFirstName(newFname)}
+                    defaultValue={first_name}
+                >
+                </TextInput>
+                <ThemedText>Last Name</ThemedText>
+                <TextInput 
+                    style={styles.input}
+                    onChangeText={newLname => setLastName(newLname)}
+                    defaultValue={last_name}
+                >
+                </TextInput>
                 <ThemedText>Email</ThemedText>
                 <TextInput 
+                    inputMode='email'
                     style={styles.input}
                     placeholder="ex : nom.prenom@mail.com"
                     onChangeText={newEmail => setEmail(newEmail)}
@@ -38,27 +56,29 @@ export default function SignIn() {
                 <ThemedText
                     type='link'
                     onPress={async () => {
-                        if (await login(email, password)){
-                            let logged_user:any =  await user(email)
-                            await setStorageItemAsync('user-email',email );
-                            await setStorageItemAsync('user-first-name', logged_user.first_name);
-                            await setStorageItemAsync('user-last-name', logged_user.last_name);
-                            signIn();
-                            router.replace('/');
-                        } else {
-                            throw console.error('Identifiant(s) incorrect(s)');
+                        if (await user(email) != null){
+                            console.error('Cette addresse mail est déjà associée à un compte. Si vous posséder déjà un compte, merci de vous connecter')
+                        }else {
+                            if (await create(first_name, last_name, email, password)){
+                                await setStorageItemAsync('user-email',email );
+                                await setStorageItemAsync('user-first-name', first_name);
+                                await setStorageItemAsync('user-last-name', last_name);
+                                signIn();
+                                router.replace('/');
+                            }
                         }
+                        
                     }}>
-                    Sign In
+                    Sign Up
                 </ThemedText>
                 <ThemedText>
-                    Don't have an account ?{' '}
+                    You already have an account ?{' '}
                     <ThemedText
                         type='link'
                         onPress={() => {
-                            router.replace('/sign-up');
+                            router.replace('/sign-in');
                         }}>
-                        Sign Up
+                        Sign In
                     </ThemedText>
                 </ThemedText>
             </ThemedView>
