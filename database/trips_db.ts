@@ -1,6 +1,5 @@
 import { openDatabaseAsync } from 'expo-sqlite';
 import { getUser } from './users_db';
-import { DateType } from 'react-native-ui-datepicker';
 
 export const create = async (user_email:string, title:string, start_date: string, end_date:string, image:any): Promise<boolean> => {
   try {
