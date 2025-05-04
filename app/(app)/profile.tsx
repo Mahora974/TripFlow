@@ -7,7 +7,7 @@ import { StyleSheet, Image, Platform } from 'react-native';
 import { ExternalLink } from '@/components/ExternalLink';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 
-export default function Index() {
+export default function Profile() {
     const { signOut } = useSession();
     return (
         <ThemedView style={{ flex: 1, alignItems: 'center' }}>

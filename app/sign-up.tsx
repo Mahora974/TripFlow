@@ -5,8 +5,7 @@ import { useSession } from './ctx';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useState } from 'react';
-import { login } from '@/database/db';
-import { create, user } from '@/database/users_db';
+import { create, getUser } from '@/database/users_db';
 import { setStorageItemAsync } from '@/hooks/useStorageState';
 
 export default function SignUp() {
@@ -22,7 +21,7 @@ export default function SignUp() {
                 <ThemedText type='title'>Sing up on TripFlow</ThemedText>
             </ThemedView>
             <ThemedView style={{ flex: 2, justifyContent: 'center', alignItems:'center' }}>
-            <ThemedText>First Name</ThemedText>
+                <ThemedText>First Name</ThemedText>
                 <TextInput 
                     style={styles.input}
                     onChangeText={newFname => setFirstName(newFname)}
@@ -56,7 +55,7 @@ export default function SignUp() {
                 <ThemedText
                     type='link'
                     onPress={async () => {
-                        if (await user(email) != null){
+                        if (await getUser(email) != null){
                             console.error('Cette addresse mail est déjà associée à un compte. Si vous posséder déjà un compte, merci de vous connecter')
                         }else {
                             if (await create(first_name, last_name, email, password)){

@@ -11,6 +11,7 @@ const MAPPING = {
   // See SF Symbols in the SF Symbols app on Mac.
   'house.fill': 'home',
   'notifications.fill':'notifications',
+  'map.fill':'map',
   'credit.card':'credit-card',
   'shield.fill':'shield',
   'help.outline':'help-outline',

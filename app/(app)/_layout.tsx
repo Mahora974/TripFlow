@@ -44,8 +44,14 @@ export default function AppLayout() {
           name="trips"
           options={{
             title: 'My Trips',
-            tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+            tabBarIcon: ({ color }) => <IconSymbol size={28} name="map.fill" color={color} />,
           }}
+          listeners={({ navigation }) => ({
+            tabPress: (e) => {
+              e.preventDefault();
+              navigation.navigate('trips', { screen: 'index' });
+            },
+          })}
         />
         <Tabs.Screen
           name="profile"
