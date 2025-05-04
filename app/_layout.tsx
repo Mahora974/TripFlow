@@ -5,9 +5,10 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
 import { initDB } from '../database/db';
-
+import { StyleSheet } from 'react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { SessionProvider } from './ctx';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -43,10 +44,18 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <SessionProvider>
-        <Slot />
-      </SessionProvider>
-    </ThemeProvider>
+    <GestureHandlerRootView style={styles.container}>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <SessionProvider>
+          <Slot />
+        </SessionProvider>
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

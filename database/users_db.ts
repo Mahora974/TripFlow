@@ -36,7 +36,7 @@ export const create = async (first_name:string, last_name:string, email: string,
   }
 }
 
-export const user = async (email: string): Promise<any> => {
+export const getUser = async (email: string): Promise<any> => {
   try {
     let db = await openDatabaseAsync('tripflow.db');
     const result = await db.getFirstAsync('SELECT * FROM users WHERE email = ? ', email);
@@ -44,5 +44,16 @@ export const user = async (email: string): Promise<any> => {
   } catch (error) {
     console.error(error);
     throw error
+  }
+}
+
+export const getAllUsers = async (): Promise<any> => {
+  try {
+    let db = await openDatabaseAsync('tripflow.db');
+    const result = await db.getAllAsync('SELECT * FROM users');
+    return result;
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
 }

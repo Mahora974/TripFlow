@@ -5,7 +5,7 @@ import { useSession } from './ctx';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useState } from 'react';
-import { login, user } from '@/database/users_db';
+import { getUser, login } from '@/database/users_db';
 import { setStorageItemAsync, useStorageState } from '@/hooks/useStorageState';
 
 export default function SignIn() {
@@ -39,7 +39,7 @@ export default function SignIn() {
                     type='link'
                     onPress={async () => {
                         if (await login(email, password)){
-                            let logged_user:any =  await user(email)
+                            let logged_user:any =  await getUser(email)
                             await setStorageItemAsync('user-email',email );
                             await setStorageItemAsync('user-first-name', logged_user.first_name);
                             await setStorageItemAsync('user-last-name', logged_user.last_name);
