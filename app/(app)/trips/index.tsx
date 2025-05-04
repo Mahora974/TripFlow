@@ -4,7 +4,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { StyleSheet, Pressable, Image, ScrollView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import { clearAllTrips, deleteTrip, trip } from '@/database/trips_db';
+import { deleteTrip, trip } from '@/database/trips_db';
 import { getStorageItemAsync } from '@/hooks/useStorageState';
 import { useEffect, useState } from 'react';
 import { getUser } from '../../../database/users_db';
