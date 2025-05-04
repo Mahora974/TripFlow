@@ -13,11 +13,22 @@ export const create = async (user_email:string, title:string, start_date: string
   }
 }
 
-export const trip = async (id: number): Promise<any> => {
+export const tripByUser = async (id: number): Promise<any> => {
   try {
     let db = await openDatabaseAsync('tripflow.db');
     const result = await db.getAllAsync('SELECT * FROM trips WHERE id_user = ? ', id);
     return result;
+  } catch (error) {
+    console.error(error);
+    throw error
+  }
+}
+
+export const getTrip = async (id: number): Promise<any> => {
+  try {
+    let db = await openDatabaseAsync('tripflow.db');
+    const result = await db.getAllAsync('SELECT * FROM trips WHERE id = ? ', id);
+    return result[0];
   } catch (error) {
     console.error(error);
     throw error

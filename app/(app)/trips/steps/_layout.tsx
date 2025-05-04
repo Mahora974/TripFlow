@@ -14,9 +14,7 @@ export default function AppLayout() {
     return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
     <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="add" options={{ headerShown: false }} />
-      <Stack.Screen name="trip_card" options={{ headerShown: false }} />
     </Stack>
   </ThemeProvider>
   );
