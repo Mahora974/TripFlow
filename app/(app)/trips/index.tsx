@@ -1,4 +1,3 @@
-
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { StyleSheet, Pressable, Image, ScrollView } from 'react-native';
@@ -33,7 +32,7 @@ export default function Trips()  {
                     let start = (new Date(start_date)).toLocaleString().split(' ')[0];
                     let end = (new Date(end_date)).toLocaleString().split(' ')[0];
                     return (
-                        <ThemedView style={styles.tripCard}>
+                        <ThemedView key={trip.id} style={styles.tripCard}>
                             {trip.image && <Image source={{ uri: trip.image }} style={{ width: 100, height: 100 }} />}
                             <ThemedView >
                                 <ThemedView style={styles.cardHeader}>
