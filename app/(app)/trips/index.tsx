@@ -1,4 +1,3 @@
-
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { StyleSheet, Pressable, Image, ScrollView } from 'react-native';
@@ -34,21 +33,6 @@ export default function Trips()  {
                     let end = (new Date(end_date)).toLocaleString().split(' ')[0];
                     return (
                         <ThemedView key={trip.id} style={styles.tripCard}>
-                            <ThemedText>{trip.title}</ThemedText>
-                            <ThemedText
-                                type='link'
-                                onPress={async () => {
-                                    if (await deleteTrip(trip.id)){
-                                        router.replace('/trips')
-                                    }
-                                }}>
-                                X
-                            </ThemedText>
-                            <ThemedText>3 activities</ThemedText>
-                            <ThemedText>{start} - {end}</ThemedText>
-                            <ThemedText>Trip planning in progress</ThemedText>
-                            {trip.image && <Image source={{ uri: trip.image }} style={{ width: 200, height: 200 }} />}
-                        <ThemedView style={styles.tripCard}>
                             {trip.image && <Image source={{ uri: trip.image }} style={{ width: 100, height: 100 }} />}
                             <ThemedView >
                                 <ThemedView style={styles.cardHeader}>
