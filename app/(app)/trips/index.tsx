@@ -34,7 +34,7 @@ export default function Trips()  {
                     let start = (new Date(start_date)).toLocaleString().split(' ')[0];
                     let end = (new Date(end_date)).toLocaleString().split(' ')[0];
                     return (
-                        <ThemedView style={styles.tripCard}>
+                        <ThemedView key={trip.id} style={styles.tripCard}>
                             <ThemedText>{trip.title}</ThemedText>
                             <ThemedText
                                 type='link'
