@@ -11,14 +11,13 @@ import { getUser } from '../../../database/users_db';
 
 
 export default function Trips()  {
-    const [title, setTitle] = useState(<ThemedText>No Upcoming Trip...</ThemedText>);
+    const [title, setTitle] = useState(<ThemedText >No Upcoming Trip...</ThemedText>);
     const [trips, setTrips] = useState(null);
     const [trips_text, setTripsText] = useState('');
     const [refresh, setRefresh] = useState(0);
 
     useEffect(() => {
         async function tripsText() {
-            // clearAllTrips();
             const email = await getStorageItemAsync('user-email');
             let user;
             if (email)
@@ -28,7 +27,7 @@ export default function Trips()  {
                 setTrips(await trip(user.id));
 
             if (trips && trips.length > 0){
-                setTitle(<ThemedText>Upcoming Trips</ThemedText>);
+                setTitle(<ThemedText type='subtitle' >Upcoming Trips</ThemedText>);
                 setTripsText(await trips.map((trip) => {
                     const { start_date, end_date } = trip;
                     let start = (new Date(start_date)).toLocaleString().split(' ')[0];
@@ -49,6 +48,25 @@ export default function Trips()  {
                             <ThemedText>{start} - {end}</ThemedText>
                             <ThemedText>Trip planning in progress</ThemedText>
                             {trip.image && <Image source={{ uri: trip.image }} style={{ width: 200, height: 200 }} />}
+                        <ThemedView style={styles.tripCard}>
+                            {trip.image && <Image source={{ uri: trip.image }} style={{ width: 100, height: 100 }} />}
+                            <ThemedView >
+                                <ThemedView style={styles.cardHeader}>
+                                    <ThemedText>{trip.title}</ThemedText>
+                                    <ThemedText
+                                        type='link'
+                                        onPress={async () => {
+                                            if (await deleteTrip(trip.id)){
+                                                router.replace('/trips')
+                                            }
+                                        }}>
+                                        X
+                                    </ThemedText>
+                                </ThemedView>
+                                <ThemedText>3 activities</ThemedText>
+                                <ThemedText>{start} - {end}</ThemedText>
+                                <ThemedText>Trip planning in progress</ThemedText>
+                            </ThemedView>
                         </ThemedView>)
                 }));
             } 
@@ -91,8 +109,20 @@ const styles = StyleSheet.create({
         borderRadius: 42,
         backgroundColor: '#0ea5e9',
     },
-    TtripCard: {
+    tripCard: {
         display: 'flex',
+        flexDirection:'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        borderBottomColor: '#000',
+        borderBottomWidth: 1,
+        padding: 3
+    },
+    cardHeader: {
+        display: 'flex',
+        flexDirection:'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
     titleContainer: {
         margin: 50,
