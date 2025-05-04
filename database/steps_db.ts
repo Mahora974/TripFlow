@@ -15,7 +15,19 @@ export const createStep = async (id_trip:string, place_name:string, place_lat:nu
 export const getStep = async (id: number): Promise<any> => {
   try {
     let db = await openDatabaseAsync('tripflow.db');
-    const result = await db.getAllAsync('SELECT * FROM steps WHERE id_user = ? ', id);
+    const result = await db.getAllAsync('SELECT * FROM steps WHERE id = ? ', id);
+    return result;
+  } catch (error) {
+    console.error(error);
+    throw error
+  }
+}
+
+
+export const getTripSteps = async (id_trip: number): Promise<any> => {
+  try {
+    let db = await openDatabaseAsync('tripflow.db');
+    const result = await db.getAllAsync('SELECT * FROM steps WHERE id_trip = ? ', id_trip);
     return result;
   } catch (error) {
     console.error(error);
