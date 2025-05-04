@@ -22,6 +22,18 @@ export const initDB = async (): Promise<void> => {
             image VARCHAR(50) NOT NULL,
             FOREIGN KEY(id_user) REFERENCES users(id)
         );
+        
+        CREATE TABLE IF NOT EXISTS steps (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id_trip INTEGER NOT NULL, 
+            place_name VARCHAR(250) NOT NULL,
+            place_lat VARCHAR(250) NOT NULL,
+            place_lon VARCHAR(250) NOT NULL,
+            start_date DATE NOT NULL,
+            end_date DATE NOT NULL,
+            description TEXT NULL,
+            FOREIGN KEY(id_trip) REFERENCES trips(id)
+        );
     `);
   } catch (error) {
     console.error(' Erreur lors de l\'init de la base');
