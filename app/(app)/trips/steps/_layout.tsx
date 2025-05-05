@@ -15,6 +15,7 @@ export default function AppLayout() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
     <Stack>
       <Stack.Screen name="add" options={{ headerShown: false }} />
+      <Stack.Screen name="update" options={{ headerShown: false }} />
     </Stack>
   </ThemeProvider>
   );

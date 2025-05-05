@@ -8,6 +8,8 @@ import { getStorageItemAsync } from '@/hooks/useStorageState';
 import { useEffect, useState } from 'react';
 import { getUser } from '../../../database/users_db';
 import { getTripSteps } from '@/database/steps_db';
+import { useFonts } from 'expo-font';
+import { useSession } from '@/app/ctx';
 
 
 export default function Trips()  {
@@ -48,7 +50,7 @@ export default function Trips()  {
                                         X
                                     </ThemedText>
                                 </ThemedView>
-                                <ThemedText>3 activities</ThemedText>
+                                <ThemedText>{trip.steps} activities</ThemedText>
                                 <ThemedText>{start} - {end}</ThemedText>
                                 <ThemedText>Trip planning in progress</ThemedText>
                                 <ThemedText

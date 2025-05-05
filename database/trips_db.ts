@@ -1,5 +1,6 @@
 import { openDatabaseAsync } from 'expo-sqlite';
 import { getUser } from './users_db';
+import { getTripSteps } from './steps_db';
 
 export const create = async (user_email:string, title:string, start_date: string, end_date:string, image:any): Promise<boolean> => {
   try {
@@ -17,6 +18,11 @@ export const tripByUser = async (id: number): Promise<any> => {
   try {
     let db = await openDatabaseAsync('tripflow.db');
     const result = await db.getAllAsync('SELECT * FROM trips WHERE id_user = ? ', id);
+    result.forEach(async (trip,index) => {
+      let steps = await getTripSteps(trip.id)   
+      trip.steps = steps.length  
+      result[index] = trip
+    });
     return result;
   } catch (error) {
     console.error(error);
@@ -38,7 +44,7 @@ export const getTrip = async (id: number): Promise<any> => {
 export const getAllTrips = async (): Promise<any> => {
   try {
     let db = await openDatabaseAsync('tripflow.db');
-    const result = await db.getAllAsync('SELECT * FROM trips');
+    let result = await db.getAllAsync('SELECT * FROM trips');
     return result;
   } catch (error) {
     console.error(error);

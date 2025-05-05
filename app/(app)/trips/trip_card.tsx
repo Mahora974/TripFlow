@@ -18,7 +18,7 @@ export default function ViewTrip({ onPress }: Props)  {
     const params = useLocalSearchParams();
     const { id } = params;
     const [trip, setTrip] = useState();
-    const [infos, setInfos] = useState(<ThemedText >No Upcoming Trip...</ThemedText>);
+    const [infos, setInfos] = useState(<ThemedText >No Loaded Trip...</ThemedText>);
     const [subtitle, setSubTitle] = useState(<ThemedText >No Upcoming Step...</ThemedText>);
     const [steps, setSteps] = useState(null);
     const [steps_text, setStepsText] = useState('');
@@ -35,7 +35,7 @@ export default function ViewTrip({ onPress }: Props)  {
                         <ThemedText type='title'>{trip.title}</ThemedText>
                         <ThemedText>{startTrip} - {endTrip}</ThemedText>
                     </ThemedView>
-            );
+                );
     
                 if (steps && steps.length > 0){
                     setSubTitle(<ThemedText type='subtitle' >Upcoming Steps</ThemedText>);
@@ -52,7 +52,7 @@ export default function ViewTrip({ onPress }: Props)  {
                                             type='link'
                                             onPress={async () => {
                                                 if (await deleteStep(step.id)){
-                                                    router.replace('/trips/trip_card?id='+trip.id);
+                                                    router.replace('/trips/trip_card?id=' + trip.id);
                                                 }
                                             }}>
                                             X
@@ -60,13 +60,20 @@ export default function ViewTrip({ onPress }: Props)  {
                                     </ThemedView>
                                     <ThemedText>{start} - {end}</ThemedText>
                                     <ThemedText>{description}</ThemedText>
+                                    <ThemedText
+                                    type='link'
+                                    onPress={async () => {
+                                        router.replace('/trips/steps/update?id='+step.id);
+                                    }}>
+                                    Edit
+                                </ThemedText>
                                 </ThemedView>
                             </ThemedView>)
                     }));
                 } 
             }
             stepsText();
-        }, [steps]);
+        }, [trip]);
     
 
 

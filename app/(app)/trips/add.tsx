@@ -74,7 +74,6 @@ export default function AddTrip({ onPress }: Props)  {
                         onPress={async () => {
                             const user =await getStorageItemAsync('user-email');
                             if (user){
-                                console.log(departure)
                                 if (await create(user, label, departure?.toString(), retur?.toString(), image)){
                                     router.replace('/trips');
                                 }

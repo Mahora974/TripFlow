@@ -16,7 +16,7 @@ export const getStep = async (id: number): Promise<any> => {
   try {
     let db = await openDatabaseAsync('tripflow.db');
     const result = await db.getAllAsync('SELECT * FROM steps WHERE id = ? ', id);
-    return result;
+    return result[0];
   } catch (error) {
     console.error(error);
     throw error

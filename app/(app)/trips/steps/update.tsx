@@ -7,18 +7,18 @@ import { getTrip } from '@/database/trips_db';
 import { getStorageItemAsync } from '@/hooks/useStorageState';
 import { router, useLocalSearchParams } from 'expo-router';
 import DateTimePicker, { DateType, useDefaultStyles } from 'react-native-ui-datepicker';
-import { createStep } from '@/database/steps_db';
+import { createStep, getStep, updateStep } from '@/database/steps_db';
 
 type Props = {
     onPress: () => void;
 };
 
-export default function AddStep({ onPress }: Props)  {
+export default function UpdateStep({ onPress }: Props)  {
     const defaultStyles = useDefaultStyles();
     const today = new Date();
     const params = useLocalSearchParams();
     const { id } = params;
-    const [trip, setTrip] = useState();
+    const [step, setStep] = useState();
     const [placeName, setPlaceName] = useState('');
     const [placeLat, setPlaceLat] = useState('');
     const [placeLon, setPlaceLon] = useState('');
@@ -28,17 +28,25 @@ export default function AddStep({ onPress }: Props)  {
 
     useEffect(() => {
         async function Trip() {
-            setTrip(await getTrip(Number(id)));
+            setStep(await getStep(Number(id)));
+            if (step){
+                setPlaceName(step.place_name);
+                setPlaceLat(step.place_lat);
+                setPlaceLon(step.place_lon);
+                setDepart(new Date(step.start_date));
+                setReturn(new Date(step.end_date));
+                setDescription(step.description);
+            }
         }
         Trip();
-    }, [id]);
+    }, [step]);
 
     return (
         <ScrollView>
 
             <ThemedView style={{ flex: 1, justifyContent: 'center' }}>
                 <ThemedView style={styles.titleContainer}>
-                    <ThemedText type='title'>Add a Step</ThemedText>
+                    <ThemedText type='title'>Update a Step</ThemedText>
                 </ThemedView>
                 <ThemedView style={{ flex: 2, justifyContent: 'center', alignItems:'center' }}>
                     <ThemedText>Step's place name</ThemedText>
@@ -95,12 +103,12 @@ export default function AddStep({ onPress }: Props)  {
                         onPress={async () => {
                             const user =await getStorageItemAsync('user-email');
                             if (user){
-                                if (await createStep(trip.id, placeName, Number(placeLat), Number(placeLon), departure?.toString(), retur?.toString(), description)){
-                                    router.replace('/trips/trip_card?id='+trip.id);
+                                if (await updateStep(placeName, Number(placeLat), Number(placeLon), departure?.toString(), retur?.toString(), description, id)){
+                                    router.replace('/trips/trip_card?id='+step.id_trip);
                                 }
                             }
                         }}>
-                        Create
+                        Update
                     </ThemedText>
                 </ThemedView>
             </ThemedView>
@@ -116,13 +124,6 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         width: '80%'
     },
-    circleButton: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 42,
-        backgroundColor: '#0ea5e9',
-    },
     titleContainer: {
         margin: 50,
         flexDirection: 'row',
@@ -134,5 +135,5 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
     }
-  });
+});
 
