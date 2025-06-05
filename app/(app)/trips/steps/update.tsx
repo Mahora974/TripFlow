@@ -39,7 +39,7 @@ export default function UpdateStep({ onPress }: Props)  {
             }
         }
         Trip();
-    }, [step]);
+    }, [placeName]);
 
     return (
         <ScrollView>

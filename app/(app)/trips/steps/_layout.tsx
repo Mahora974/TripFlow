@@ -16,6 +16,7 @@ export default function AppLayout() {
     <Stack>
       <Stack.Screen name="add" options={{ headerShown: false }} />
       <Stack.Screen name="update" options={{ headerShown: false }} />
+      <Stack.Screen name="journal" options={{ headerShown: false }} />
     </Stack>
   </ThemeProvider>
   );

@@ -8,7 +8,12 @@ import { useEffect, useState } from 'react';
 import trips from '.';
 import { deleteStep, getTripSteps } from '@/database/steps_db';
 import { MaterialIcons } from '@expo/vector-icons';
-import { StyleSheet, Pressable, Image, ScrollView } from 'react-native';
+import { StyleSheet, Pressable, Image, ScrollView, Platform } from 'react-native';
+import { AppleMaps, GoogleMaps } from 'expo-maps';
+import MapView from 'react-native-maps';
+import { TextInput } from 'react-native-gesture-handler';
+import { createList, getTripList, updateList } from '@/database/lists_db';
+import Checkbox from 'expo-checkbox';
 
 type Props = {
     onPress: () => void;
@@ -22,6 +27,9 @@ export default function ViewTrip({ onPress }: Props)  {
     const [subtitle, setSubTitle] = useState(<ThemedText >No Upcoming Step...</ThemedText>);
     const [steps, setSteps] = useState(null);
     const [steps_text, setStepsText] = useState('');
+    const [label, setLabel] = useState('');
+    const [lists, setLists] = useState(null);
+    const [lists_text, setListsText] = useState('');
 
         useEffect(() => {
             async function stepsText() {
@@ -60,13 +68,22 @@ export default function ViewTrip({ onPress }: Props)  {
                                     </ThemedView>
                                     <ThemedText>{start} - {end}</ThemedText>
                                     <ThemedText>{description}</ThemedText>
-                                    <ThemedText
-                                    type='link'
-                                    onPress={async () => {
-                                        router.replace('/trips/steps/update?id='+step.id);
-                                    }}>
-                                    Edit
-                                </ThemedText>
+                                    <ThemedView  style={styles.cardHeader}>
+                                        <ThemedText
+                                            type='link'
+                                            onPress={async () => {
+                                                router.replace('/trips/steps/update?id='+step.id);
+                                        }}>
+                                            Edit
+                                        </ThemedText>
+                                        <ThemedText
+                                            type='link'
+                                            onPress={async () => {
+                                                router.replace('/trips/steps/journal?id='+step.id);
+                                        }}>
+                                            Log in journal
+                                        </ThemedText>
+                                    </ThemedView>
                                 </ThemedView>
                             </ThemedView>)
                     }));
@@ -75,6 +92,30 @@ export default function ViewTrip({ onPress }: Props)  {
             stepsText();
         }, [trip]);
     
+    useEffect(() => {
+        async function listText() {
+            setLists(await getTripList(Number(id)));
+
+            if (lists && lists.length > 0){
+                setListsText(await lists.map((list) => {
+                    return (
+                        <ThemedView key={list.id} style={styles.listCard}>
+                            <Checkbox
+                                value={Boolean(list.checked)}
+                                onValueChange={async (check)=>{
+                                    list.checked = Number(check)
+                                    await updateList(list.id, list.checked)
+                                }}
+                                color={Boolean(list.checked) ? '#0ea5e9' : undefined}
+                                style='textDecoration = line-through'
+                            > </Checkbox>
+                            <ThemedText>{list.label}</ThemedText>
+                        </ThemedView>)
+                }));
+            } 
+        }
+        listText();
+    }, [trip]);
 
 
 
@@ -92,6 +133,28 @@ export default function ViewTrip({ onPress }: Props)  {
                     </Pressable>
                 </ThemedView>
             </ThemedView>
+
+            <ThemedView>
+                <ThemedText type='subtitle'>To Do before leaving</ThemedText>
+                <ThemedView style={styles.addTODO} >
+                    <TextInput 
+                        style={styles.input} 
+                        onChangeText={newLabel => setLabel(newLabel)}
+                        defaultValue={label}
+                    >
+                    </TextInput>
+                    <ThemedText
+                        type='link'
+                        onPress={async () => {
+                            if (await createList(Number(id),label)){
+                                router.replace('/trips/trip_card?id='+id);
+                            }
+                        }}>
+                        Create
+                    </ThemedText>
+                </ThemedView>
+                {lists_text}
+            </ThemedView>
             <ThemedView>
                 {subtitle}
                 <ThemedText>Tap the + button to start adding steps</ThemedText>
@@ -102,12 +165,25 @@ export default function ViewTrip({ onPress }: Props)  {
     );
 }
 const styles = StyleSheet.create({
+    input: {
+        borderColor: '#000',
+        borderStyle: 'solid',
+        borderWidth: 3,
+        borderRadius: 5,
+        width: '80%'
+    },
     circleButton: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 42,
         backgroundColor: '#0ea5e9',
+    },
+    addTODO: {
+        display: 'flex',
+        flexDirection:'row',
+        alignItems: 'center',
+        width:'100%',
     },
     tripCard: {
         display: 'flex',
@@ -117,6 +193,13 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         borderBottomColor: '#000',
         borderBottomWidth: 1,
+        padding: 3
+    },
+    listCard: {
+        display: 'flex',
+        flexDirection:'row',
+        alignItems: 'center',
+        width:'100%',
         padding: 3
     },
     cardHeader: {
@@ -135,5 +218,12 @@ const styles = StyleSheet.create({
     buttonContainer: {
         width: 40,
         height: 40,
-    }
+    },
+    container: {
+        flex: 1,
+    },
+    map: {
+        width: '100%',
+        height: '100%',
+    },
 });

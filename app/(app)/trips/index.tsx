@@ -31,7 +31,7 @@ export default function Trips()  {
             if (trips && trips.length > 0){
                 setTitle(<ThemedText type='subtitle' >Upcoming Trips</ThemedText>);
                 setTripsText(await trips.map((trip) => {
-                    const { id, start_date, end_date } = trip;
+                    const { start_date, end_date } = trip;
                     let start = (new Date(start_date)).toLocaleString().split(' ')[0];
                     let end = (new Date(end_date)).toLocaleString().split(' ')[0];
                     return (

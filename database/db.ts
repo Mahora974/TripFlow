@@ -34,6 +34,14 @@ export const initDB = async (): Promise<void> => {
             description TEXT NULL,
             FOREIGN KEY(id_trip) REFERENCES trips(id)
         );
+
+        CREATE TABLE IF NOT EXISTS lists (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          id_trip INTEGER NOT NULL,
+          label VARCHAR(250) NOT NULL,
+          checked TINYINT DEFAULT 0 NOT NULL,
+          FOREIGN KEY(id_trip) REFERENCES trips(id)
+        )
     `);
   } catch (error) {
     console.error(' Erreur lors de l\'init de la base');
